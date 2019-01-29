@@ -1,0 +1,13 @@
+server:
+  port: 8010
+
+info:
+  tags:
+    environment: 'local'
+    service: 'rest'
+
+opentracing:
+  jaeger:
+    udp-sender:
+      host: 'localhost'
+      port: 6831

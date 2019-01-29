@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: 'spring-admin-server'
+  cloud:
+    config:
+      uri: 'http://spring-config-server:8888'

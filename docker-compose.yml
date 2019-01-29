@@ -1,0 +1,63 @@
+version: '2.1'
+
+services:
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"
+      - "6831:6831/udp"
+
+  spring-config-server:
+    container_name: 'spring-config-server'
+    image: azul/zulu-openjdk:8
+    volumes:
+      - "./configuration-server/target/configuration-server-1.0.0.jar:/opt/app/configuration-server.jar:ro"
+      - "./configuration-server/config-repo:/tmp/configuration-server/config-repo:rw"
+    ports:
+      - "8888:8888"
+    command: ["java", "-jar", "/opt/app/configuration-server.jar"]
+
+  spring-admin-server:
+    container_name: 'spring-admin-server'
+    image: azul/zulu-openjdk:8
+    volumes:
+      - "./admin-server/target/admin-server-1.0.0.jar:/opt/app/admin-server.jar:ro"
+    ports:
+      - "8099:8099"
+    command: ["java", "-jar", "/opt/app/admin-server.jar"]
+
+  service-time:
+    container_name: 'service-time'
+    image: azul/zulu-openjdk:8
+    volumes:
+      - "./service-time/target/service-time-1.0.0.jar:/opt/app/service-time.jar:ro"
+    ports:
+      - "8081:8080"
+    depends_on:
+      - spring-config-server
+    command: ["java", "-jar", "/opt/app/service-time.jar"]
+
+
+  service-order:
+    container_name: 'service-order'
+    image: azul/zulu-openjdk:8
+    volumes:
+      - "./service-order/target/service-order-1.0.0.jar:/opt/app/service-order.jar:ro"
+    ports:
+      - "8082:8080"
+    depends_on:
+      - spring-config-server
+    command: ["java", "-jar", "/opt/app/service-order.jar"]
+
+
+  service-reservation:
+    container_name: 'service-reservation'
+    image: azul/zulu-openjdk:8
+    volumes:
+      - "./service-reservation/target/service-reservation-1.0.0.jar:/opt/app/service-reservation.jar:ro"
+    ports:
+      - "8083:8080"
+    depends_on:
+      - spring-config-server
+    command: ["java", "-jar", "/opt/app/service-reservation.jar"]

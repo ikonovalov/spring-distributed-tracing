@@ -1,0 +1,30 @@
+spring:
+  boot:
+    admin:
+      client:
+        url: 'http://spring-admin-server:8099'
+        auto-deregistration: true
+  cloud:
+    config:
+      server:
+        git:
+          uri: '/tmp/configuration-server/config-repo'
+          skipSslValidation: true
+          timeout: 4
+          force-pull: true
+
+server:
+  port: 8888
+
+info:
+  tags:
+    environment: 'test'
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
