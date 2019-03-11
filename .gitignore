@@ -1,14 +1,10 @@
 .idea
 
 *.iml
-*.iws
-
 # IntelliJ
 out/
 
 # mpeltonen/sbt-idea plugin
-.idea_modules/
-
 ### Java template
 # Compiled class file
 *.class

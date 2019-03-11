@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 @RestController
 public class TimeEndpoint {
 
-    private Logger log = LoggerFactory.getLogger(TimeEndpoint.class);
+    private final Logger log = LoggerFactory.getLogger(TimeEndpoint.class);
 
     @GetMapping("/now")
     public ResponseEntity<String> getTime() {

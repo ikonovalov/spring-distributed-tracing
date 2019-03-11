@@ -20,14 +20,13 @@ public class ReservationServiceClient implements ReservationService {
 
     @Override
     public String reservation(String orderId) {
-        ResponseEntity<String> response = restTemplate.getForEntity(
-                reservationServiceUrl + "/reservation/{orderId}", String.class, orderId
-        );
+        String reservationUrl = reservationServiceUrl + "/reservation/{orderId}";
+        ResponseEntity<String> response = restTemplate.getForEntity(reservationUrl, String.class, orderId);
 
         if (response.getStatusCode() == HttpStatus.OK) {
             return response.getBody();
+        } else {
+            throw new RuntimeException("Failed to connect with time service");
         }
-
-        throw new RuntimeException("Failed to connect with time service");
     }
 }

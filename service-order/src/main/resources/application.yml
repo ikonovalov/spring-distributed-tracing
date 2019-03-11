@@ -1,7 +1,7 @@
 info:
   tags:
     environment: 'test'
-    service: 'rest'
+    service: 'business'
 
 opentracing:
   jaeger:

@@ -13,7 +13,7 @@ public class TimeServiceClient implements TimeService {
 
     private final RestTemplate restTemplate;
 
-    private Logger log = LoggerFactory.getLogger(TimeServiceClient.class);
+    private final Logger log = LoggerFactory.getLogger(TimeServiceClient.class);
 
     @Value("${services.time.url}")
     private String timeServiceUrl;

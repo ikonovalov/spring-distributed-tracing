@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/api/order")
 @RefreshScope
 public class OrderRestService {
 
@@ -19,7 +21,7 @@ public class OrderRestService {
 
     private final ReservationService reservationService;
 
-    private Logger log = LoggerFactory.getLogger(OrderRestService.class);
+    private final Logger log = LoggerFactory.getLogger(OrderRestService.class);
 
     public OrderRestService(TimeService timeService, ReservationService reservationService) {
         this.timeService = timeService;
@@ -41,3 +43,5 @@ public class OrderRestService {
 
 
 }
+
+
