@@ -1,6 +1,8 @@
 package ru.codeunited.service.time;
 
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +17,19 @@ public class TimeEndpoint {
 
     private final Logger log = LoggerFactory.getLogger(TimeEndpoint.class);
 
+    private final Counter counter;
+
+    public TimeEndpoint(MeterRegistry registry) {
+        this.counter = registry.counter("time.service.now");
+    }
+
+
     @GetMapping("/now")
     public ResponseEntity<String> getTime() {
-        log.trace("TRACE");
-        log.debug("DEBUG");
-        log.info("INFO");
-        log.warn("WARN");
-        log.error("ERROR");
-        return ResponseEntity.ok(LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+        String now = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
+        log.info(now);
+        counter.increment();
+        return ResponseEntity.ok(now);
     }
 
 }

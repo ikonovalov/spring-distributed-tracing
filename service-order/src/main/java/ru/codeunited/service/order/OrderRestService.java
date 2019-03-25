@@ -1,5 +1,7 @@
 package ru.codeunited.service.order;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -21,11 +23,14 @@ public class OrderRestService {
 
     private final ReservationService reservationService;
 
+    private final Counter counter;
+
     private final Logger log = LoggerFactory.getLogger(OrderRestService.class);
 
-    public OrderRestService(TimeService timeService, ReservationService reservationService) {
+    public OrderRestService(TimeService timeService, ReservationService reservationService, MeterRegistry registry) {
         this.timeService = timeService;
         this.reservationService = reservationService;
+        this.counter = registry.counter("order.service.placed-orders");
     }
 
     @PostConstruct
@@ -34,13 +39,14 @@ public class OrderRestService {
     }
 
     @PostMapping
-    public ResponseEntity<String> placeOrder() throws IOException {
+    public ResponseEntity<String> placeOrder() {
         String orderId = UUID.randomUUID().toString();
         String nowTime = timeService.now();
         String reservation = reservationService.reservation(orderId);
-        return ResponseEntity.ok("Order " + orderId + " placed in " + nowTime + "\n" + reservation + "\n");
+        ResponseEntity<String> ok = ResponseEntity.ok("Order " + orderId + " placed in " + nowTime + "\n" + reservation + "\n");
+        counter.increment();
+        return ok;
     }
-
 
 }
 

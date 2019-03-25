@@ -4,6 +4,8 @@ spring:
       client:
         url: 'http://spring-admin-server:8099'
         auto-deregistration: true
+        instance:
+          preferIp: true
   cloud:
     config:
       server:

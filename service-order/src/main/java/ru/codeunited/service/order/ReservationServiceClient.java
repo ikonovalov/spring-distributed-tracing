@@ -1,5 +1,6 @@
 package ru.codeunited.service.order;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ public class ReservationServiceClient implements ReservationService {
         this.restTemplate = restTemplate;
     }
 
+    @HystrixCommand(fallbackMethod = "fallbackReservation")
     @Override
     public String reservation(String orderId) {
         String reservationUrl = reservationServiceUrl + "/reservation/{orderId}";
@@ -29,4 +31,9 @@ public class ReservationServiceClient implements ReservationService {
             throw new RuntimeException("Failed to connect with time service");
         }
     }
+
+    protected String fallbackReservation(String orderId) {
+        return "Reservation service temporary not available";
+    }
+
 }

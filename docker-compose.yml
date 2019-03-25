@@ -2,6 +2,27 @@ version: '2.1'
 
 services:
 
+  l5d:
+    image: buoyantio/linkerd:1.6.2
+    volumes:
+      - "./linkerd/config.yaml:/io.buoyant/linkerd.yaml:ro"
+      - "./linkerd/disco:/io.buoyant/disco"
+    ports:
+      - "9990:9990"
+      - "4140:4140"
+    command: >
+      /io.buoyant/linkerd.yaml
+
+  hello:
+    image: nginx
+    # mount the www directory as the static content to serve
+    volumes:
+      - ./linkerd/static:/usr/share/nginx/html:ro
+
+#  namerd:
+#    image: buoyantio/namerd:1.6.2
+
+
   jaeger:
     image: jaegertracing/all-in-one:latest
     ports:
@@ -32,8 +53,8 @@ services:
     image: azul/zulu-openjdk:8
     volumes:
       - "./service-time/target/service-time-1.0.0.jar:/opt/app/service-time.jar:ro"
-    ports:
-      - "8081:8080"
+#    ports:
+#      - "8081:8080"
     depends_on:
       - spring-config-server
     command: ["java", "-jar", "/opt/app/service-time.jar"]
@@ -56,8 +77,8 @@ services:
     image: azul/zulu-openjdk:8
     volumes:
       - "./service-reservation/target/service-reservation-1.0.0.jar:/opt/app/service-reservation.jar:ro"
-    ports:
-      - "8083:8080"
+#    ports:
+#      - "8083:8080"
     depends_on:
       - spring-config-server
     command: ["java", "-jar", "/opt/app/service-reservation.jar"]
