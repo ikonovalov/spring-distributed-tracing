@@ -8,6 +8,3 @@ opentracing:
     udp-sender:
       host: 'jaeger'
       port: 6831
-
-hawtio:
-  authenticationEnabled: false

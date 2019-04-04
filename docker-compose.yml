@@ -65,8 +65,11 @@ services:
     image: azul/zulu-openjdk:8
     volumes:
       - "./service-order/target/service-order-1.0.0.jar:/opt/app/service-order.jar:ro"
-    ports:
-      - "8082:8080"
+    environment:
+        HTTP_PROXYHOST: l5d
+        HTTP_PROXYPORT: 4140
+#    ports:
+#      - "8082:8080"
     depends_on:
       - spring-config-server
     command: ["java", "-jar", "/opt/app/service-order.jar"]
