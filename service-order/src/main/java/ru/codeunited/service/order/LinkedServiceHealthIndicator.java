@@ -4,8 +4,7 @@ import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.stereotype.Component;
 
-//@Component
-// Temporary disable. Switching to hystrix health indicators.
+@Component
 public class LinkedServiceHealthIndicator extends AbstractHealthIndicator {
 
     private final TimeService timeService;

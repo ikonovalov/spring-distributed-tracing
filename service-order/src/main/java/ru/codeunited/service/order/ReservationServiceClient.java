@@ -32,6 +32,7 @@ public class ReservationServiceClient implements ReservationService {
         }
     }
 
+    @SuppressWarnings({"unused", "SameReturnValue"})
     protected String fallbackReservation(String orderId) {
         return "Reservation service temporary not available";
     }

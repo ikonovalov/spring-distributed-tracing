@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -27,7 +26,7 @@ public class ReservationRestService {
     }
 
     @GetMapping("/reservation/{orderId}")
-    public ResponseEntity<String> getReservation(@PathVariable String orderId) throws IOException {
+    public ResponseEntity<String> getReservation(@PathVariable String orderId) {
         String msg = "Order " + orderId + " reserved at " + timeService.now();
         log.info(msg);
         String reservationId = UUID.randomUUID().toString();
