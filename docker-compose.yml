@@ -19,9 +19,10 @@ services:
     volumes:
       - ./linkerd/static:/usr/share/nginx/html:ro
 
-#  namerd:
-#    image: buoyantio/namerd:1.6.2
-
+  solr:
+    image: solr:7
+    ports:
+      - "8983:8983"
 
   jaeger:
     image: jaegertracing/all-in-one:latest

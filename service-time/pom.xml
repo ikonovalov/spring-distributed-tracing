@@ -43,6 +43,12 @@
             <version>1.0.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>ru.codeunited</groupId>
+            <artifactId>audit-flume</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>

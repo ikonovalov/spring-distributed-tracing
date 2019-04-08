@@ -11,3 +11,11 @@ opentracing:
     udp-sender:
       host: 'localhost'
       port: 6831
+
+audit:
+  flume:
+    name: "agent007"
+    enabled: true
+    properties:
+      channel.type: memory
+      channel.capacity: 200
