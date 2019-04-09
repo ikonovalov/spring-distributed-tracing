@@ -19,10 +19,29 @@ services:
     volumes:
       - ./linkerd/static:/usr/share/nginx/html:ro
 
-  solr:
-    image: solr:7
+#  solr:
+#    image: solr:7
+#    ports:
+#      - "8983:8983"
+
+  flume:
+    image: probablyfine/flume:latest
+    environment:
+      FLUME_AGENT_NAME: a1
+    volumes:
+      - ./flume.conf:/opt/flume-config/flume.conf:ro
+      - ./log4j.properties:/opt/flume-config/log4j.properties:ro
     ports:
-      - "8983:8983"
+      - "5555:5555"
+
+#  flume-failover:
+#    image: probablyfine/flume:latest
+#    environment:
+#      "FLUME_AGENT_NAME": "docker"
+#    volumes:
+#      - ./flume.conf:/opt/flume-config/flume.conf
+#    ports:
+#      - "5565:5564"
 
   jaeger:
     image: jaegertracing/all-in-one:latest

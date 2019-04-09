@@ -9,12 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class FlumeEventRepository implements AuditEventRepository {
 
@@ -30,22 +31,21 @@ public class FlumeEventRepository implements AuditEventRepository {
         setup.put("sinks", "sink1 sink2");
         setup.put("sink1.type", "avro");
         setup.put("sink2.type", "avro");
-        setup.put("sink1.hostname", "collector1.apache.org");
-        setup.put("sink1.port", "5564");
-        setup.put("sink2.hostname", "collector2.apache.org");
-        setup.put("sink2.port",  "5565");
-        setup.put("processor.type", "load_balance");
+        setup.put("sink1.hostname", "localhost");
+        setup.put("sink1.port", "5555");
+        setup.put("sink2.hostname", "localhost");
+        setup.put("sink2.port",  "5555");
+        setup.put("processor.type", "failover");
+
 
         agent = new EmbeddedAgent(setup.getName());
         agent.configure(setup.getProperties());
     }
 
-    @PostConstruct
     public void doStart() {
         agent.start();
     }
 
-    @PreDestroy
     public void doStop() {
         agent.stop();
     }
@@ -55,7 +55,9 @@ public class FlumeEventRepository implements AuditEventRepository {
         JSONEvent jsonEvent = new JSONEvent();
         ObjectMapper mapper = new ObjectMapper();
         try {
-            jsonEvent.setBody(mapper.writeValueAsBytes(event));
+            jsonEvent.setHeaders(new HashMap<>());
+            String body = mapper.writeValueAsString(event);
+            jsonEvent.setBody(body.getBytes(UTF_8));
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
