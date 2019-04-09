@@ -44,13 +44,13 @@ public class FlumeEventRepository implements AuditEventRepository {
             jsonEvent.setHeaders(new HashMap<>());
             String body = mapper.writeValueAsString(event);
             jsonEvent.setBody(body.getBytes(UTF_8));
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e);
-        }
-        try {
             agent.put(jsonEvent);
         } catch (EventDeliveryException e) {
             log.error("Fatal error", e);
+            throw new IllegalStateException(e);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            throw new IllegalArgumentException(e);
         }
     }
 
