@@ -19,25 +19,11 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class FlumeEventRepository implements AuditEventRepository {
 
-    private final FlumeEventRepositoryProperties setup;
-
     private final EmbeddedAgent agent;
 
     private final Logger log = LoggerFactory.getLogger(FlumeEventRepository.class);
 
     public FlumeEventRepository(FlumeEventRepositoryProperties setup) {
-        this.setup = setup;
-
-        setup.put("sinks", "sink1 sink2");
-        setup.put("sink1.type", "avro");
-        setup.put("sink2.type", "avro");
-        setup.put("sink1.hostname", "localhost");
-        setup.put("sink1.port", "5555");
-        setup.put("sink2.hostname", "localhost");
-        setup.put("sink2.port",  "5555");
-        setup.put("processor.type", "failover");
-
-
         agent = new EmbeddedAgent(setup.getName());
         agent.configure(setup.getProperties());
     }
