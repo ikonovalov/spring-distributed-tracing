@@ -8,3 +8,19 @@ opentracing:
     udp-sender:
       host: 'jaeger'
       port: 6831
+
+audit:
+  flume:
+    name: "agent007"
+    enabled: true
+    properties:
+      channel.type: memory
+      channel.capacity: 200
+      sinks: sink1 sink2
+      sink1.type: avro
+      sink1.hostname: flume
+      sink1.port: 5555
+      sink2.type: avro
+      sink2.hostname: flume
+      sink2.port: 5555
+      processor.type: failover
