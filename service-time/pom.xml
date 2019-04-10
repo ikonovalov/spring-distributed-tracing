@@ -47,6 +47,12 @@
             <groupId>ru.codeunited</groupId>
             <artifactId>audit-flume</artifactId>
             <version>1.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.curator</groupId>
+                    <artifactId>curator-framework</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>
