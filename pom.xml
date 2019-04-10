@@ -30,4 +30,14 @@
         <module>audit-flume</module>
     </modules>
     <packaging>pom</packaging>
+
+    <dependencyManagement>
+       <dependencies>
+           <dependency>
+               <groupId>io.opentracing.contrib</groupId>
+               <artifactId>opentracing-spring-jaeger-cloud-starter</artifactId>
+               <version>1.0.3</version>
+           </dependency>
+       </dependencies>
+    </dependencyManagement>
 </project>
