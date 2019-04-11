@@ -21,6 +21,7 @@ Starts configuration service first. ```make clean && make```. Business services 
 Access to order service via Linkerd.
 ```bash
 export http_proxy=http://localhost:4140
-curl -v http://service-order/actuator/health
-ab -X localhost:4140 -c10 -n1000 http://service-order/actuator/health
+curl -v http://service-order-l5d/actuator/health
+curl -XPOST http://service-order-l5d/api/order
+ab -X localhost:4140 -c10 -n1000 http://service-order-l5d/actuator/health
 ```

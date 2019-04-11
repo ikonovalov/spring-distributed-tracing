@@ -37,4 +37,13 @@ public class ReservationServiceClient implements ReservationService {
         return "Reservation service temporary not available";
     }
 
+    @Override
+    public RestTemplate getRestTemplate() {
+        return restTemplate;
+    }
+
+    @Override
+    public String getBaseUrl() {
+        return reservationServiceUrl;
+    }
 }

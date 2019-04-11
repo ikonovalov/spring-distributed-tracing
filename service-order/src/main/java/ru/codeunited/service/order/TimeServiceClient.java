@@ -37,4 +37,14 @@ public class TimeServiceClient implements TimeService {
             throw new RuntimeException("Failed to connect with time service");
         }
     }
+
+    @Override
+    public RestTemplate getRestTemplate() {
+        return restTemplate;
+    }
+
+    @Override
+    public String getBaseUrl() {
+        return timeServiceUrl;
+    }
 }
