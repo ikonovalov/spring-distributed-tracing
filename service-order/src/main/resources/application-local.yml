@@ -1,0 +1,19 @@
+info:
+  tags:
+    environment: 'test'
+    service: 'business'
+
+opentracing:
+  jaeger:
+    udp-sender:
+      host: 'localhost'
+      port: 6831
+
+services:
+  time:
+    url: http://localhost:8080
+  reservation:
+    url: http://localhost:8080
+  proxy:
+    enabled: false
+    url: http://localhost:8990

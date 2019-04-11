@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,32 +16,46 @@ import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
 
+import static java.net.Proxy.Type.HTTP;
+
 @SpringBootApplication
 @EnableCircuitBreaker
 public class ServiceOrder {
 
-    @Bean
-    @ConditionalOnProperty(prefix = "services", name="proxy")
-    public RestTemplate restTemplate(
-            RestTemplateBuilder restTemplateBuilder,
-            @Value("${service.proxy}") String proxyUrl) {
+    @Configuration
+    @ConditionalOnProperty(prefix = "services.proxy", name="enabled", havingValue = "false", matchIfMissing = true)
+    public static class OpenConfiguration {
+        @Bean
+        public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
+            return restTemplateBuilder.build();
+        }
+    }
 
-        return restTemplateBuilder
-                .requestFactory(() -> {
-                    SimpleClientHttpRequestFactory clientHttpReq = new SimpleClientHttpRequestFactory();
-                    URL prx;
-                    try {
-                        prx = new URL(proxyUrl);
-                    } catch (MalformedURLException e) {
-                        throw new IllegalArgumentException(e);
-                    }
-                    Proxy proxy = new Proxy(
-                            Proxy.Type.HTTP, new InetSocketAddress(prx.getHost(), prx.getPort())
-                    );
-                    clientHttpReq.setProxy(proxy);
-                    return clientHttpReq;
-                })
-                .build();
+    @Configuration
+    @ConditionalOnProperty(prefix = "services.proxy", name="enabled", havingValue = "true")
+    public static class ProxiedConfiguration {
+
+        @Bean
+        public RestTemplate restTemplate(
+                RestTemplateBuilder restTemplateBuilder,
+                @Value("${services.proxy.url}") String proxyUrl) {
+
+            return restTemplateBuilder
+                    .requestFactory(() -> {
+                        SimpleClientHttpRequestFactory clientHttpReq = new SimpleClientHttpRequestFactory();
+                        try {
+                            URL prx = new URL(proxyUrl);
+                            String host = prx.getHost();
+                            int port = prx.getPort();
+                            Proxy proxy = new Proxy(HTTP, new InetSocketAddress(host, port));
+                            clientHttpReq.setProxy(proxy);
+                            return clientHttpReq;
+                        } catch (MalformedURLException e) {
+                            throw new IllegalArgumentException(e);
+                        }
+                    })
+                    .build();
+        }
     }
 
     public static void main(String[] args) {
