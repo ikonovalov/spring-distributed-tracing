@@ -13,16 +13,16 @@ services:
     command: >
       /io.buoyant/linkerd.yaml
 
-  hello:
-    image: nginx
-    # mount the www directory as the static content to serve
-    volumes:
-      - ./linkerd/static:/usr/share/nginx/html:ro
+  # Audit events: App -> Flume -> Solr
 
-#  solr:
-#    image: solr:7
-#    ports:
-#      - "8983:8983"
+  solr:
+    image: solr:7
+    ports:
+      - "8983:8983"
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - gettingstarted
 
   flume:
     image: probablyfine/flume:latest
@@ -34,20 +34,15 @@ services:
     ports:
       - "5555:5555"
 
-#  flume-failover:
-#    image: probablyfine/flume:latest
-#    environment:
-#      "FLUME_AGENT_NAME": "docker"
-#    volumes:
-#      - ./flume.conf:/opt/flume-config/flume.conf
-#    ports:
-#      - "5565:5564"
+  # Distributed tracing
 
   jaeger:
     image: jaegertracing/all-in-one:latest
     ports:
       - "16686:16686"
       - "6831:6831/udp"
+
+  # Spring's support infrastructure
 
   spring-config-server:
     container_name: 'spring-config-server'
@@ -68,13 +63,13 @@ services:
       - "8099:8099"
     command: ["java", "-jar", "/opt/app/admin-server.jar"]
 
+  # Spring's applications
+
   service-time:
     container_name: 'service-time'
     image: azul/zulu-openjdk:8
     volumes:
       - "./service-time/target/service-time-1.0.0.jar:/opt/app/service-time.jar:ro"
-#    ports:
-#      - "8081:8080"
     depends_on:
       - spring-config-server
     command: ["java", "-jar", "/opt/app/service-time.jar"]
@@ -88,8 +83,6 @@ services:
     environment:
         HTTP_PROXYHOST: l5d
         HTTP_PROXYPORT: 4140
-#    ports:
-#      - "8082:8080"
     depends_on:
       - spring-config-server
     command: ["java", "-jar", "/opt/app/service-order.jar"]
@@ -100,8 +93,6 @@ services:
     image: azul/zulu-openjdk:8
     volumes:
       - "./service-reservation/target/service-reservation-1.0.0.jar:/opt/app/service-reservation.jar:ro"
-#    ports:
-#      - "8083:8080"
     depends_on:
       - spring-config-server
     command: ["java", "-jar", "/opt/app/service-reservation.jar"]
