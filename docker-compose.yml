@@ -63,6 +63,16 @@ services:
       - "8099:8099"
     command: ["java", "-jar", "/opt/app/admin-server.jar"]
 
+  graphit:
+    container_name: "graphit"
+    image: graphiteapp/graphite-statsd
+    ports:
+      - "8032:80"
+      - "2003-2004:2003-2004"
+#      - "2023-2024:2023-2024"
+#      - "8125:8125/udp"
+#      - "8126:8126"
+
   # Spring's applications
 
   service-time:

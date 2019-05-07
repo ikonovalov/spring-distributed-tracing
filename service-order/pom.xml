@@ -53,6 +53,12 @@
             <artifactId>opentracing-spring-jaeger-cloud-starter</artifactId>
         </dependency>
 
+        <!-- Metrics backend -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-graphite</artifactId>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
