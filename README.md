@@ -15,6 +15,7 @@ Starts configuration service first. ```make clean && make```. Business services 
 * Jaeger WebUI http://localhost:16686
 * Order service ```curl -XPOST http://localhost:8082/api/order```
 * Linkerd admin http://localhost:9990
+* Graphite http://localhost:8032
 
 
 ### Linkerd as a HTTP proxy
